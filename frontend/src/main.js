@@ -12,9 +12,6 @@ import router from './router/router'
 import Antv from 'antv'
 import 'antv/dist/antv.css'
 
-import FastClick from 'fastclick'
-FastClick.attach(document.body);
-
 Vue.use(Antv)
 Vue.use(VueRouter)
 Vue.use(VueResource)

@@ -12,7 +12,7 @@
                 <tbody>
                     <tr v-for="(item, index) in info.items" :key="index">
                         <td @dblclick="addItem(index,item)">{{ item }}</td>
-                        <td class="data-item" v-for="(data, index2) in info.datas[index]" :key="index2" @dblclick="changeData(index2,index,data)" :style="{backgroundColor: data < 0 ? '#ffebbb':'#e0ffcd'}">
+                        <td class="data-item" v-for="(data, index2) in info.datas[index]" :key="index2" v-on:dblclick.native="changeData(index2,index,data)" :style="{backgroundColor: data < 0 ? '#ffebbb':'#e0ffcd'}">
                             {{ data }}
                         </td>
                         <td v-if="!info.datas[index].length"></td>

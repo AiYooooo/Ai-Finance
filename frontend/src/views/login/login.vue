@@ -1,5 +1,9 @@
 <template>
     <div class="login-page">
+        <div class="login-title">
+            <strong>Ai-Finance</strong>
+            <span>极致简洁 · 拙而不工</span>
+        </div>
         <div class="login-item" v-show="showLogin">
             <div>
                 <input type="text" v-bind:class="{ noEmpty: username }" v-model="username">
@@ -40,6 +44,13 @@
         mounted: function(){
             if(getCookie('usertoken')){
                 this.$router.push('/home');
+            }else{
+                if(getCookie('username')){
+                    this.username = getCookie('username');
+                }
+                if(getCookie('userpass')){
+                    this.password = getCookie('userpass');
+                }
             }
         },
         data: function(){
@@ -53,7 +64,6 @@
             }
         },
         methods: {
-
             toggle: function(){
                 this.showLogin = !this.showLogin;
             },
@@ -95,6 +105,8 @@
                         }else{
                             this.$message.success('验证成功，欢迎你：'+res.body.name);
                             setCookie('usertoken', res.body.token, 1000*60);
+                            setCookie('username', this.username);
+                            setCookie('userpass', this.password, 1000*60*60*24);
                             setTimeout(function(){
                                 this.$router.push('/home');
                             }.bind(this),1000);
@@ -111,9 +123,25 @@
         width: 100%;
         height: 100%;
         display: flex;
+        flex-direction: column;
         justify-content: center;
-        align-items: flex-start;
-        padding-top: calc(45vh - 90px);
+        align-items: center;
+        // padding-top: calc(45vh - 90px);
+
+        .login-title {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            strong {
+                font-size: 1.4rem;
+            }
+            span {
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+            }
+        }
 
         .login-item{
             text-align:center;
@@ -140,7 +168,8 @@
                     display:block;
                     width:100%;
                     height:100%;
-                    line-height:40px;
+                    line-height:20px;
+                    font-size: 1rem;
                     margin:0 auto;
                     outline:none;
                     border:1px solid #ddd;
@@ -148,6 +177,7 @@
                     border-radius: 4px;
                     padding:10px;
                     transition: all 0.5s;
+                    appearance: none;
                 }
                 input:focus, input.noEmpty {
                     border-color: #108ee9;

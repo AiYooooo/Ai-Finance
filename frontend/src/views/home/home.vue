@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <div class="header">
-            <strong>Ai-Finance<span>Beta 0.1.1</span></strong>
+            <strong>Ai-Finance<span>Beta 0.1.2</span></strong>
             <div class="user">
                 <!-- <div class="userimg"><img src="../../assets/images/userimg.png"></div> -->
                 <span>欢迎你，{{name}}</span>
@@ -67,7 +67,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: #fff;
+            // background-color: #fff;
+            background-color: #f7f9ff;
 
             strong {
                 font-size: 1.2rem;

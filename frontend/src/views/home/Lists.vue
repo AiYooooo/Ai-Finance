@@ -159,7 +159,7 @@
             width: 95%;
             max-width: 800px;
             margin: 0 auto 20px;
-            background-color: #fff;
+            background-color: #f7f9ff;
             height: 60px;
             border: 1px dashed #aaa;
             border-radius: 5px;
@@ -167,6 +167,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: all 0.3s;
             svg {
                 transition: all 0.3s;
                 height: 20px;
@@ -180,6 +181,7 @@
             }
         }
         .add-item:hover {
+            border-color: #cc0000;
             span {
                 color: #cc0000;
             }

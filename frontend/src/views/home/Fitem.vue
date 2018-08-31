@@ -93,6 +93,9 @@
                 this.$router.push('../');
             },
             setFinanceDate: function(date) {
+                if(!date){
+                    return 'loading';
+                }
                 let time = new Date(parseInt(date));
                 let Y = time.getFullYear();
                 let M = this.double(time.getMonth()+1);
@@ -135,7 +138,7 @@
             max-width: 800px;
             padding: 0 2%;
             margin: 0 auto 20px;
-            background-color: #fff;
+            background-color: #f7f9ff;
             height: 60px;
             border: 1px dashed #aaa;
             border-radius: 5px;
