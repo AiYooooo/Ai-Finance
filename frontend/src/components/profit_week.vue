@@ -18,19 +18,24 @@
                         <td v-if="!info.datas[index].length"></td>
                     </tr>
                     <tr>
-                        <td>净资产</td>
-                        <td v-for="(time, index) in info.times" :key="index">{{ getFullAmount(index) }}</td>
+                        <td>净利润</td>
+                        <td v-for="(time, index) in info.times" :key="index">{{ getProfit(index).JLR }}</td>
+                        <td v-if="!info.times.length"></td>
+                    </tr>
+                    <tr>
+                        <td>利润率</td>
+                        <td v-for="(time, index) in info.times" :key="index">{{ getProfit(index).LRL }}</td>
                         <td v-if="!info.times.length"></td>
                     </tr>
                     <tr>
                         <td><svg @click="addItem(-1,'')" t="1535511778964" class="icon" style="" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2641" xmlns:xlink="http://www.w3.org/1999/xlink"><path d="M510.12507762 967.58469632c-250.93545643 0-454.35920043-203.46473813-454.35920043-454.43255751S259.18962119 58.73468416 510.12507762 58.73468416c250.93761365 0 454.36135765 203.44963527 454.36135765 454.41745465S761.06269127 967.58469632 510.12507762 967.58469632zM510.12507762 115.53470919c-219.57095083 0-397.56349099 178.01843029-397.56349099 397.61742962S290.55412565 910.77172679 510.12507762 910.77172679s397.56349099-178.02058752 397.56349099-397.61958798S729.69602845 115.53470919 510.12507762 115.53470919zM680.51004643 541.55862357L538.52508957 541.55862357l0 142.00653369c0 15.67685859-12.71452331 28.39569749-28.39785472 28.39569749-15.68333141 0-28.39569749-12.7188389-28.3956975-28.39569749l0-142.00653369-141.98927246 0c-15.68333141 0-28.39785472-12.71668053-28.39785472-28.40648476 0-15.67901582 12.71668053-28.39569749 28.39785472-28.3956975l141.98927246 0 0-142.0130065c0-15.67685859 12.71452331-28.38922467 28.3956975-28.38922468 15.68548864 0 28.39785472 12.71020771 28.39785472 28.38922468l0 142.0130065 141.984958 0c15.68548864 0 28.39785472 12.71668053 28.39785472 28.3956975C708.90790115 528.84194304 696.19553507 541.55862357 680.51004643 541.55862357z" p-id="2642"></path></svg></td>
-                        <td :colspan="info.times.length">点击左边的按钮添加一项新的条目，双击数字和条目名进行编辑。</td>
+                        <td :colspan="info.times.length">点击左边的按钮添加一项新的条目，成本为负值，盈利为正值，双击数字和条目名进行编辑。</td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div class="charts">
-            <div id="amount_week_echarts" :style="{width:'100%',height:'350px'}"></div>
+            <div id="profit_week_echarts" :style="{width:'100%',height:'350px'}"></div>
         </div>
         <v-modal
             v-model="dataChangeVisible"
@@ -38,7 +43,7 @@
             @onOk="changeDataOk"
             @onCancel="changeDataCancel">
                 <p class="modal-p">确定要修改{{ data_info }}的数据么？</p>
-                <p class="modal-p">备注：如果此数值为欠款，应填写负值。</p>
+                <p class="modal-p">备注：如果此数值为成本，应填写负值。</p>
                 <v-input size="large" v-model="datachange"/>
         </v-modal>
         <v-modal
@@ -65,6 +70,9 @@
         data: function(){
             return{
                 token: '',
+                CB: [],
+                LR: [],
+                LRL: [],
                 dataChangeVisible: false,
                 data_info: '',
                 x: 0,
@@ -94,7 +102,7 @@
                         let M = that.double(day.getMonth()+1);
                         let D = that.double(day.getDate());
                         that.info.times.push(Y + '-' + M + '-' + D);
-                        that.info.items.push('零钱');
+                        that.info.items.push('成本');
                         that.info.datas.push([0]);
                         // that.info.datas.map(function(data){
                         //     data.push(0);
@@ -124,7 +132,7 @@
                 }
             },
             initCharts: function(){
-                let myChart = echarts.init(document.getElementById('amount_week_echarts'));
+                let myChart = echarts.init(document.getElementById('profit_week_echarts'));
                 let option = {
                     tooltip: {
                         trigger: 'axis'
@@ -132,6 +140,7 @@
                     legend: {
                         data:this.info.items
                     },
+                    color: ['#f7aa00','#1abb9c','#40a8c4'],
                     grid: {
                         top: '15%',
                         left: '3%',
@@ -146,23 +155,45 @@
                     },
                     xAxis: {
                         type: 'category',
-                        boundaryGap: false,
                         data: this.info.times
                     },
-                    yAxis: {
-                        type: 'value'
-                    },
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '金额',
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        },
+                        {
+                            type: 'value',
+                            name: '利润率',
+                            axisLabel: {
+                                formatter: '{value}%'
+                            }
+                        }
+                    ],
                     series: [
+                        {
+                            name:'总成本',
+                            type:'bar',
+                            barMaxWidth: 20,
+                            data: this.CB
+                        },
+                        {
+                            name:'总收入',
+                            type:'bar',
+                            barMaxWidth: 20,
+                            data: this.LR
+                        },
+                        {
+                            name:'利润率',
+                            type:'line',
+                            yAxisIndex: 1,
+                            data:this.LRL
+                        }
                     ]
                 };
-                for(let i=0; i<this.info.items.length; i++){
-                    option.series.push({
-                        name: this.info.items[i],
-                        type: 'line',
-                        data: this.info.datas[i]
-                    });
-                }
-                // 绘制图表
                 myChart.setOption(option);
             },
             double: function(num) {
@@ -208,12 +239,25 @@
             addItemCancel: function(){
                 this.itemAddVisible = false;
             },
-            getFullAmount: function(index){
-                let num = 0;
+            getProfit: function(index){
+                let CB = 0;
+                let LR = 0;
                 this.info.datas.map(function(data){
-                    num = parseInt(100*num + parseInt(data[index]*100))/100;
+                    if(data[index] < 0){
+                        CB = parseInt(100*CB + parseInt(data[index]*100))/100;
+                    }else{
+                        LR = parseInt(100*LR + parseInt(data[index]*100))/100;
+                    }
                 });
-                return num;
+                let JLR = parseInt(parseInt(LR * 100) + parseInt(CB * 100))/100;
+                let LRL = CB == 0 ? 0 : parseInt((LR + CB) / (-1 * CB) * 10000)/100;
+                this.CB[index] = CB * -1;
+                this.LR[index] = LR;
+                this.LRL[index] = LRL;
+                return {
+                    'JLR' : JLR,
+                    'LRL' : LRL + '%'
+                };
             },
             dataNeedSave: function(){
                 this.$emit('dataRefresh');

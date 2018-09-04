@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <div class="header">
-            <strong>Ai-Finance<span>Beta 0.1.2</span></strong>
+            <strong>Ai-Finance<span>Beta 0.1.4</span></strong>
             <div class="user">
                 <!-- <div class="userimg"><img src="../../assets/images/userimg.png"></div> -->
                 <span>欢迎你，{{name}}</span>

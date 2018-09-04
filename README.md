@@ -24,6 +24,10 @@
 
 ### 当前版本
 
+#### Beta 0.1.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2018-09-05发布
+
+* 全新账簿类型上线--项目盈利周表
+
 #### Beta 0.1.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2018-09-04发布
 
 * 更新了登录页样式

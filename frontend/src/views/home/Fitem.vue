@@ -11,18 +11,21 @@
         </div>
         <p>账簿独立编号：{{ id }}</p>
         <AmountWeek ref="amountWeek" v-if="infos.type == '净资产统计周表'" :info="infos" @dataRefresh="dataChange"></AmountWeek>
+        <ProfitWeek ref="profitWeek" v-if="infos.type == '项目盈利周表'" :info="infos" @dataRefresh="dataChange"></ProfitWeek>
     </div>
 </template>
 
 <script>
     import { getCookie } from '../../assets/js/cookie.js'
     import AmountWeek from '../../components/amount_week.vue'
+    import ProfitWeek from '../../components/profit_week.vue'
     import axios from 'axios'
     import config           from '../../config.js'
 
     export default{
         components: {
-            AmountWeek
+            AmountWeek,
+            ProfitWeek
         },
         props: {
             id: String
@@ -114,7 +117,11 @@
             },
             saveData: function(){
                 this.needsave = false;
-                this.$refs.amountWeek.dataSave();
+                if(this.infos.type == '净资产统计周表'){
+                    this.$refs.amountWeek.dataSave();
+                }else if(this.infos.type == '项目盈利周表'){
+                    this.$refs.profitWeek.dataSave();
+                }
             }
         }
     }

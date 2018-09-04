@@ -36,6 +36,7 @@
                 v-model="finance_type"
                 placeholder="请选择账簿类型">
                 <v-option value="净资产统计周表">净资产统计周表</v-option>
+                <v-option value="项目盈利周表">项目盈利周表</v-option>
             </v-select>
         </v-modal>
     </div>
