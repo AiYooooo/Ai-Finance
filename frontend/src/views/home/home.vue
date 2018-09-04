@@ -17,6 +17,8 @@
 <script>
     import { getCookie,delCookie } from '../../assets/js/cookie.js'
     import axios from 'axios'
+    import config           from '../../config.js'
+
     export default{
         data: function(){
             return{
@@ -37,7 +39,7 @@
                 this.$router.push('/');
             },
             getUserInfo: function(){
-                axios.get('https://aiyoapi.aiyo.tech/api/users/info',{
+                axios.get(config.baseUrl+'/users/info',{
                     headers: { 
                         'Content-Type': 'application/x-www-form-urlencoded',
                         'Authorization' : this.token

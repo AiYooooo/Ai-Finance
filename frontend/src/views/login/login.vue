@@ -39,6 +39,7 @@
 
 <script>
     import {setCookie,getCookie} from '../../assets/js/cookie.js'
+    import config from '../../config.js'
 
     export default{
         mounted: function(){
@@ -76,7 +77,7 @@
                         'name':this.newUsername,
                         'password':this.newPassword
                     };
-                    this.$http.post('https://aiyoapi.aiyo.tech/api/signup',data).then((res)=>{
+                    this.$http.post(config.baseUrl+'/signup',data).then((res)=>{
                         this.delayLoading = false;
                         if(!res.body.success){
                             this.$message.error(res.body.message);
@@ -98,7 +99,7 @@
                         'name':this.username,
                         'password':this.password
                     };
-                    this.$http.post('https://aiyoapi.aiyo.tech/api/user/accesstoken',data).then((res)=>{
+                    this.$http.post(config.baseUrl+'/user/accesstoken',data).then((res)=>{
                         this.delayLoading = false;
                         if(!res.body.success){
                             this.$message.error(res.body.message);
@@ -107,9 +108,10 @@
                             setCookie('usertoken', res.body.token, 1000*60);
                             setCookie('username', this.username);
                             setCookie('userpass', this.password, 1000*60*60*24);
+
                             setTimeout(function(){
                                 this.$router.push('/home');
-                            }.bind(this),1000);
+                            }.bind(this),500);
                         }
                     })
                 }
@@ -124,9 +126,14 @@
         height: 100%;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         align-items: center;
-        // padding-top: calc(45vh - 90px);
+        background-color: #FFFCF5;
+        padding-top: calc(50vh - 200px);
+        background-image: url('../../assets/images/login-background.png');
+        background-position: center bottom;
+        background-size: contain;
+        background-repeat: no-repeat;
 
         .login-title {
             display: flex;
@@ -161,7 +168,7 @@
                     top: 10px;
                     transition: all 0.5s;
                     color: #ddd;
-                    background-color: #f7f9ff;
+                    background-color: #FFFCF5;
                     padding: 0 5px;
                 }
                 input{
@@ -173,7 +180,7 @@
                     margin:0 auto;
                     outline:none;
                     border:1px solid #ddd;
-                    background-color: #f7f9ff;
+                    background-color: #FFFCF5;
                     border-radius: 4px;
                     padding:10px;
                     transition: all 0.5s;

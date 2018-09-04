@@ -42,8 +42,9 @@
 </template>
 
 <script>
-    import { getCookie } from '../../assets/js/cookie.js'
-    import axios from 'axios'
+    import { getCookie }    from '../../assets/js/cookie.js'
+    import axios            from 'axios'
+    import config           from '../../config.js'
 
     export default{
         data: function(){
@@ -69,7 +70,7 @@
         },
         methods:{
             getUserInfo: function(){
-                axios.get('https://aiyoapi.aiyo.tech/api/users/info')
+                axios.get(config.baseUrl+'/users/info')
                 .then((response) => {
                     this.loading = false;
                     this.name = response.data.username;
@@ -90,7 +91,7 @@
                 }
                 this.confirmLoading = true;
                 let that = this;
-                axios.post('https://aiyoapi.aiyo.tech/api/finance/add', {
+                axios.post(config.baseUrl+'/finance/add', {
                     'name' : this.finance_name,
                     'type' : this.finance_type
                 }).then(function (response) {

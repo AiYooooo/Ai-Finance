@@ -38,7 +38,7 @@
       justify-content: center;
       align-items: center;
       color: #999;
-      background-color: #f2f2f0;
+      background-color: #FFFCF5;
 
       a {
         color: #333;

@@ -12,7 +12,7 @@
                 <tbody>
                     <tr v-for="(item, index) in info.items" :key="index">
                         <td @dblclick="addItem(index,item)">{{ item }}</td>
-                        <td class="data-item" v-for="(data, index2) in info.datas[index]" :key="index2" v-on:dblclick.native="changeData(index2,index,data)" :style="{backgroundColor: data < 0 ? '#ffebbb':'#e0ffcd'}">
+                        <td class="data-item" v-for="(data, index2) in info.datas[index]" :key="index2" v-on:dblclick="changeData(index2,index,data)" :style="{backgroundColor: data < 0 ? '#ffebbb':'#e0ffcd'}">
                             {{ data }}
                         </td>
                         <td v-if="!info.datas[index].length"></td>
@@ -55,6 +55,7 @@
 
 <script>
     import { getCookie } from '../assets/js/cookie.js'
+    import config           from '../config.js'
     import axios from 'axios'
     import echarts from "echarts"
     const qs = require('qs');
@@ -155,10 +156,12 @@
                     ]
                 };
                 for(let i=0; i<this.info.items.length; i++){
+                    this.info.datas[i].map(function(item){
+                        return parseFloat(item);
+                    });
                     option.series.push({
                         name: this.info.items[i],
                         type: 'line',
-                        stack: '总量',
                         data: this.info.datas[i]
                     });
                 }
@@ -226,7 +229,7 @@
                     'items' : this.info.items,
                     'datas' : this.info.datas
                 };
-                axios.post('https://aiyoapi.aiyo.tech/api/finance/update', qs.stringify(data)).then(function (response) {
+                axios.post(config.baseUrl+'/finance/update', qs.stringify(data)).then(function (response) {
                     if(response.data.success){
                         that.$message.success('更新账簿成功！');
                         that.initCharts();

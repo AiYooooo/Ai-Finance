@@ -18,6 +18,7 @@
     import { getCookie } from '../../assets/js/cookie.js'
     import AmountWeek from '../../components/amount_week.vue'
     import axios from 'axios'
+    import config           from '../../config.js'
 
     export default{
         components: {
@@ -45,7 +46,7 @@
         methods:{
             getFinanceInfo: function(){
                 let that = this;
-                axios.get('https://aiyoapi.aiyo.tech/api/finance/detail',{
+                axios.get(config.baseUrl+'/finance/detail',{
                     params: {
                         'id' : this.id
                     }
@@ -68,7 +69,7 @@
                     title: '确定要删除这个账簿么？',
                     content: '该行为不可逆，请谨慎操作。',
                     onOk() {
-                        axios.get('https://aiyoapi.aiyo.tech/api/finance/delete',{
+                        axios.get(config.baseUrl+'/finance/delete',{
                             params: {
                                 'id' : that.id
                             }
