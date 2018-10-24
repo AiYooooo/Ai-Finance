@@ -12,6 +12,10 @@ const FinanceSchema = new Schema({
 		type: String,
 		require: true
 	},
+	closed: {
+		type: Boolean,
+		require: true
+	},
 	type: {
 		type: String,
 		require: true

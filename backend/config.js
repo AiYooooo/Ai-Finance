@@ -1,4 +1,4 @@
 module.exports = {
-  'secret': '这里填写加密信息',
-  'database': '这里填写数据信息'
+  'secret': 'thisisTheSecretOfAiYoTech',
+  'database': 'mongodb://AiYoTech:ailasuoer2829@ds018498.mlab.com:18498/aiyotech'
 };

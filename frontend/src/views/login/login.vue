@@ -105,9 +105,9 @@
                             this.$message.error(res.body.message);
                         }else{
                             this.$message.success('验证成功，欢迎你：'+res.body.name);
-                            setCookie('usertoken', res.body.token, 1000*60);
-                            setCookie('username', this.username);
-                            setCookie('userpass', this.password, 1000*60*60*24);
+                            setCookie('usertoken', res.body.token, 100000);
+                            setCookie('username', this.username, 100000);
+                            setCookie('userpass', this.password, 100000);
 
                             setTimeout(function(){
                                 this.$router.push('/home');

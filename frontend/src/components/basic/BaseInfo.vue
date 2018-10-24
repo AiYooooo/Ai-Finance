@@ -2,7 +2,7 @@
 	<div>
 		<h3>{{ msgs.title }}</h3>
 		<h3>{{ msgs.con }}</h3>
-  </div>
+  	</div>
 </template>
 
 <script>

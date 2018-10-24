@@ -1,6 +1,5 @@
 const express = require('express');
 const User = require('../models/user');
-// const Finance = require('../models/finance');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 const passport = require('passport');
@@ -88,6 +87,7 @@ router.post('/finance/add',
 		req.user.account.unshift({
 			id: id,
 			title: req.body.name,
+			closed: false,
 			type: req.body.type,
 			date: new Date().getTime(),
 			times: [],
@@ -101,7 +101,7 @@ router.post('/finance/add',
 		});
 		res.json({
 			success: true,
-			messgae: '添加成功'
+			message: '添加成功'
 		});
 	}
 });
@@ -116,7 +116,7 @@ router.get('/finance/detail',
 				res.json({
 					success: true,
 					data: obj,
-					messgae: '查询成功'
+					message: '查询成功'
 				});
 			}
 		});
@@ -143,7 +143,31 @@ router.get('/finance/delete',
 		});
 		res.json({
 			success: true,
-			messgae: '删除成功'
+			message: '删除成功'
+		});
+	}else{
+		res.json({ success: false, message: '无效的账簿ID！' });
+	}
+});
+
+//根据id关闭账簿
+router.get('/finance/close',
+	passport.authenticate('bearer', {session:false}),
+	(req,res) => {
+	if(req.query.id) {
+		req.user.account.map(function(obj){
+			if(obj.id == req.query.id){
+				obj.closed = true;
+			}
+		});
+		req.user.save(function(err){
+			if(err){
+				res.send(err);
+			}
+		});
+		res.json({
+			success: true,
+			message: '关闭成功'
 		});
 	}else{
 		res.json({ success: false, message: '无效的账簿ID！' });
@@ -160,6 +184,13 @@ router.post('/finance/update',
 	}else{
 		req.user.account.map(function(obj){
 			if(obj.id == req.body.id){
+				if(obj.closed) {
+					res.json({
+						success: false,
+						message: '此账簿已关闭，无法更新'
+					});
+					return;
+				}
 				obj.times = [].concat(req.body.times);
 				obj.items = [].concat(req.body.items);
 				obj.datas = [].concat(req.body.datas);
@@ -173,7 +204,7 @@ router.post('/finance/update',
 		});
 		res.json({
 			success: true,
-			messgae: '更新成功'
+			message: '更新成功'
 		});
 	}
 });
