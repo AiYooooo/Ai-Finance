@@ -6,6 +6,8 @@
 
 	前端：Vue
 
+	数据库：MongoDB
+	
 	后端：Node.js
 
 ### 使用说明
@@ -23,6 +25,10 @@
 		3、部署到服务器上并运行node程序
 
 ### 当前版本
+
+#### Beta 0.2.2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2018-10-26发布
+
+* [新增]增加注册时手机号验证功能
 
 #### Beta 0.2.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2018-10-24发布
 

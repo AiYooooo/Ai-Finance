@@ -8,7 +8,7 @@ const Strategy = require('passport-http-bearer').Strategy;
 const routes = require('./routes');
 const config = require('./config');
 
-let port = process.env.PORT || 8082;
+let port = process.env.PORT || 8080;
 
 app.use(passport.initialize());
 app.use(morgan('dev'));

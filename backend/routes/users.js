@@ -9,13 +9,54 @@ const qs = require('qs');
 
 require('../passport')(passport);
 
+const SMSClient = require('@alicloud/sms-sdk');
+const accessKeyId = 'LTAItKQYpUhZZyXJ';
+const secretAccessKey = 'QG87svc5avG8qRhgxh87Xvj3ceLfUM';
+
+const verificationCode = {};
+const vCodeDoneTime = 30 * 60000;
+
+//获取手机验证码
+router.post('/getVerificationCode',(req,res) => {
+
+	if(!req.body.phone) {
+		res.json({ success: false, message: '请输入注册手机号' });
+	}else{
+		let phone = req.body.phone;
+		let vCode = parseInt(Math.random() * 9000 + 1000);
+		let smsClient = new SMSClient({accessKeyId, secretAccessKey})
+		smsClient.sendSMS({
+		    PhoneNumbers: phone,
+		    SignName: 'AiYoTech',
+		    TemplateCode: 'SMS_149100771',
+		    TemplateParam: '{"code":"'+vCode+'"}'
+		}).then(function (res2) {
+		    if (res2.Code === 'OK') {
+		    	verificationCode[phone] = {
+		    		'phone' : phone,
+		    		'vCode' : vCode,
+		    		'time' : new Date().getTime()
+		    	};
+		        res.json({ success: true, message: '验证码已发送' });
+		    }else {
+		    	res.json({ success: false, message: res2.Message });
+		    }
+		}, function (err) {
+		    console.log(err)
+		})
+	}
+})
+
 //注册
 router.post('/signup', (req,res) => {
-	if(!req.body.name || !req.body.password) {
-		res.json({ success: false, message: '请输入账号密码。' });
+	if(!req.body.name || !req.body.password || !req.body.phone || !req.body.vCode) {
+		res.json({ success: false, message: '请将表单填写完整。' });
+	}else if(!verificationCode[req.body.phone] || verificationCode[req.body.phone].vCode != req.body.vCode){
+		res.json({ success: false, message: '验证码过期或错误。' });
 	}else{
 		var newUser = new User({
 			name: req.body.name,
+			phone: req.body.phone,
 			password: req.body.password
 		});
 		//保存用户账号
@@ -209,5 +250,17 @@ router.post('/finance/update',
 	}
 });
 
+//每分钟更新验证码缓存，清除过期的验证码
+function refreshVCode () {
+	let timenow = new Date().getTime();
+	for(var i in verificationCode) {
+		if(timenow - verificationCode[i].time > vCodeDoneTime){
+			delete verificationCode[i];
+		}
+	}
+	console.log(verificationCode);
+}
+
+setInterval(refreshVCode, 60000);
 
 module.exports = router;

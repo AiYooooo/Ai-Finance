@@ -22,6 +22,17 @@
 
         <div class="login-item" v-show="!showLogin">
             <div>
+                <input type="tel" v-bind:class="{ noEmpty: newUserPhone }" v-model="newUserPhone">
+                <span>请输入手机号</span>
+            </div>
+            <div class="vCode">
+                <input type="text" v-bind:class="{ noEmpty: newUserVCode }" v-model="newUserVCode">
+                <span>请输入验证码</span>
+                <v-button :loading="delayLoading" @click.native="getVCode" :disabled="vcodeText != '获取验证码'">
+                    {{vcodeText}}
+                </v-button>
+            </div>
+            <div>
                 <input type="text" v-bind:class="{ noEmpty: newUsername }" v-model="newUsername">
                 <span>请输入用户名</span>
             </div>
@@ -58,8 +69,11 @@
             return{
                 showLogin: true,
                 delayLoading: false,
+                vcodeText: '获取验证码',
                 username: '',
                 password: '',
+                newUserPhone: '',
+                newUserVCode: '',
                 newUsername: '',
                 newPassword: ''
             }
@@ -69,12 +83,14 @@
                 this.showLogin = !this.showLogin;
             },
             register: function(){
-                if(this.newUsername == "" || this.newPassword == ""){
+                if(this.newUsername == "" || this.newPassword == "" || this.newUserPhone == "" || this.vCode == ""){
                     this.$message.warning('注册信息不全');
                 }else{
                     this.delayLoading = true;
                     let data = {
                         'name':this.newUsername,
+                        'phone':this.newUserPhone,
+                        'vCode':this.newUserVCode,
                         'password':this.newPassword
                     };
                     this.$http.post(config.baseUrl+'/signup',data).then((res)=>{
@@ -86,6 +102,25 @@
                             this.username = this.newUsername;
                             this.password = this.newPassword;
                             this.showLogin = true;
+                        }
+                    })
+                }
+            },
+            getVCode: function() {
+                if(this.newUserPhone == ""){
+                    this.$message.warning('请先填写手机号');
+                }else{
+                    this.delayLoading = true;
+                    let data = {
+                        'phone':this.newUserPhone
+                    };
+                    this.$http.post(config.baseUrl+'/getVerificationCode',data).then((res)=>{
+                        this.delayLoading = false;
+                        if(!res.body.success){
+                            this.$message.error(res.body.message);
+                        }else{
+                            this.$message.success('短信验证码已发送');
+                            this.vcodeText = '已发送';
                         }
                     })
                 }
@@ -164,10 +199,10 @@
                     font-size: 0.9rem;
                     line-height: 20px;
                     user-select: none;
-                    left: 30px;
+                    left: 20px;
                     top: 10px;
                     transition: all 0.5s;
-                    color: #ddd;
+                    color: #aaa;
                     background-color: #FFFCF5;
                     padding: 0 5px;
                 }
@@ -177,7 +212,6 @@
                     height:100%;
                     line-height:20px;
                     font-size: 1rem;
-                    margin:0 auto;
                     outline:none;
                     border:1px solid #ddd;
                     background-color: #FFFCF5;
@@ -194,6 +228,16 @@
                     left: 20px;
                     color: #108ee9;
                 }
+            }
+            .vCode input {
+                width: calc(100% - 120px);
+            }
+            .vCode button {
+                width: 100px;
+                position: absolute;
+                top: 0;
+                right: 0;
+                font-size: 0.8rem;
             }
         }
 
