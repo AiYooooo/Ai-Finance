@@ -60,9 +60,9 @@
                 if(getCookie('username')){
                     this.username = getCookie('username');
                 }
-                if(getCookie('userpass')){
-                    this.password = getCookie('userpass');
-                }
+                // if(getCookie('userpass')){
+                //     this.password = getCookie('userpass');
+                // }
             }
         },
         data: function(){
@@ -142,7 +142,7 @@
                             this.$message.success('验证成功，欢迎你：'+res.body.name);
                             setCookie('usertoken', res.body.token, 100000);
                             setCookie('username', this.username, 100000);
-                            setCookie('userpass', this.password, 100000);
+                            // setCookie('userpass', this.password, 100000);
 
                             setTimeout(function(){
                                 this.$router.push('/home');
