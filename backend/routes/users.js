@@ -10,8 +10,8 @@ const qs = require('qs');
 require('../passport')(passport);
 
 const SMSClient = require('@alicloud/sms-sdk');
-const accessKeyId = 'LTAItKQYpUhZZyXJ';
-const secretAccessKey = 'QG87svc5avG8qRhgxh87Xvj3ceLfUM';
+const accessKeyId = '*******************';
+const secretAccessKey = '*******************';
 
 const verificationCode = {};
 const vCodeDoneTime = 30 * 60000;
@@ -232,6 +232,9 @@ router.post('/finance/update',
 					});
 					return;
 				}
+				req.body.times = JSON.parse(req.body.times);
+				req.body.items = JSON.parse(req.body.items);
+				req.body.datas = JSON.parse(req.body.datas);
 				obj.times = [].concat(req.body.times);
 				obj.items = [].concat(req.body.items);
 				obj.datas = [].concat(req.body.datas);
