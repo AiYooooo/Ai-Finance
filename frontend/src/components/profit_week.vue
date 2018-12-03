@@ -283,9 +283,9 @@
                 let that = this;
                 let data = {
                     'id' : this.info.id,
-                    'times' : this.info.times,
-                    'items' : this.info.items,
-                    'datas' : this.info.datas
+                    'times' : JSON.stringify(this.info.times),
+                    'items' : JSON.stringify(this.info.items),
+                    'datas' : JSON.stringify(this.info.datas)
                 };
                 axios.post(config.baseUrl+'/finance/update', qs.stringify(data)).then(function (response) {
                     if(response.data.success){

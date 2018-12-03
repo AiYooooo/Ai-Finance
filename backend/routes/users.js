@@ -10,8 +10,8 @@ const qs = require('qs');
 require('../passport')(passport);
 
 const SMSClient = require('@alicloud/sms-sdk');
-const accessKeyId = '*******************';
-const secretAccessKey = '*******************';
+const accessKeyId = 'LTAItKQYpUhZZyXJ';
+const secretAccessKey = 'QG87svc5avG8qRhgxh87Xvj3ceLfUM';
 
 const verificationCode = {};
 const vCodeDoneTime = 30 * 60000;
